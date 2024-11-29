@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tree Diagram</title>
+  <style>
+    .node rect {
+      fill: lightblue;
+      stroke: black;
+    }
+    .node text {
+      font: 12px sans-serif;
+    }
+    .link {
+      fill: none;
+      stroke: gray;
+      stroke-width: 1.5px;
+    }
+    #chart-container {
+      width: 100%;
+      overflow-x: scroll; /* Enable horizontal scrolling */
+    }
+    #chart {
+      min-width: 1200px; /* Default minimum width for the diagram */
+    }
+  </style>
+</head>
+<body>
+  <h1>Tree Diagram Generator</h1>
+  <p>Upload your JSON file to visualize the full hierarchy:</p>
+  <input type="file" id="fileInput" />
+  <div id="chart-container">
+    <div id="chart"></div>
+  </div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
