@@ -1,0 +1,19 @@
+.node rect {
+    fill: lightblue;
+    stroke: black;
+}
+.node text {
+    font: 12px sans-serif;
+}
+.link {
+    fill: none;
+    stroke: gray;
+    stroke-width: 1.5px;
+}
+#chart-container {
+    width: 100%;
+    overflow-x: scroll; /* Enable horizontal scrolling */
+}
+#chart {
+    min-width: 1200px; /* Default minimum width for the diagram */
+}
