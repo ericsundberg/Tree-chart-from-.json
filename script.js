@@ -1,14 +1,17 @@
 let treeData = null; // Store the JSON data globally
+let lastFile = null; // Store the last file reference
 
 // File input handler
 document.getElementById("fileInput").addEventListener("change", function (event) {
   const file = event.target.files[0];
 
   if (file) {
+    lastFile = file; // Store the selected file
     const reader = new FileReader();
     reader.onload = function (e) {
       treeData = JSON.parse(e.target.result); // Store the data globally
       renderTree(treeData); // Render the tree with the full dataset
+      showRefreshButton(); // Show the refresh button
     };
     reader.readAsText(file);
   } else {
@@ -106,3 +109,23 @@ function renderTree(data) {
     .style("fill", "#555")
     .text(d => (d.data.era ? `${d.data.era.start}–${d.data.era.end} BP` : ""));
 }
+
+// Show the refresh button
+function showRefreshButton() {
+  const refreshButton = document.getElementById("refreshButton");
+  refreshButton.style.display = "inline-block"; // Make the button visible
+}
+
+// Refresh button handler
+document.getElementById("refreshButton").addEventListener("click", function () {
+  if (lastFile) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      treeData = JSON.parse(e.target.result); // Reload the data
+      renderTree(treeData); // Re-render the tree
+    };
+    reader.readAsText(lastFile);
+  } else {
+    alert("No file to refresh. Please upload a file first.");
+  }
+});
