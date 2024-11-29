@@ -27,14 +27,37 @@ function renderTree(data) {
   const containerWidth = 2000; // Total container width
   const containerHeight = 1000; // Base height
 
-  // Set up tree layout with extra separation
-  const root = d3.hierarchy(data, d => d.children);
+  // Build a lookup table for all nodes by name
+  const nodeLookup = {};
+  function buildLookup(node) {
+    nodeLookup[node.name] = node;
+    if (node.children) {
+      node.children.forEach(buildLookup);
+    }
+  }
+  buildLookup(data);
+
+  // Modify hierarchy to treat related nodes like children but mark them
+  const root = d3.hierarchy(data, d => {
+    if (d.children || d.related) {
+      // Combine children and related nodes
+      const combined = (d.children || []).concat(
+        (d.related || []).map(name => {
+          const original = nodeLookup[name]; // Find the original node by name
+          return {
+            ...original, // Copy all original node data
+            isRelated: true // Mark as related
+          };
+        })
+      );
+      return combined;
+    }
+    return null;
+  });
+
   const treeLayout = d3.tree()
     .size([containerWidth - 100, containerHeight - 100])
-    .separation((a, b) => {
-      // Add extra space between nodes
-      return a.parent === b.parent ? 1.5 : 2.5;
-    });
+    .separation((a, b) => (a.parent === b.parent ? 1.5 : 2.5));
 
   treeLayout(root);
 
@@ -46,7 +69,7 @@ function renderTree(data) {
 
   const g = svg.append("g").attr("transform", `translate(50,50)`);
 
-  // Draw links
+  // Draw hierarchical links
   g.selectAll(".link")
     .data(root.links())
     .enter()
@@ -56,7 +79,8 @@ function renderTree(data) {
       .x(d => d.x)
       .y(d => d.y))
     .style("fill", "none")
-    .style("stroke", "#ccc")
+    .style("stroke", d => (d.target.data.isRelated ? "#ccc" : "#ccc")) // Black for related, gray for normal
+    .style("stroke-dasharray", d => (d.target.data.isRelated ? "4 2" : "none"))
     .style("stroke-width", "2px");
 
   // Draw nodes
@@ -79,7 +103,7 @@ function renderTree(data) {
         case "Branch": return "#f2d0e8";
         case "Group": return "#d0f2e0";
         case "Subgroup": return "#f2efd0";
-        case "Language": return "#e0d0f2";
+        case "Language": return d.data.isRelated ? "#e0d0f2" : "#e0d0f2"; // Gray for related languages
         case "Dialect": return "#f2d0d0";
         default: return "#e0e0e0"; // Default gray for unspecified levels
       }
@@ -88,14 +112,14 @@ function renderTree(data) {
 
   // Node labels
   node.append("text")
-    .attr("dy", "-0.5em") // Position above center
+    .attr("dy", "-0.5em")
     .style("text-anchor", "middle")
     .style("font-size", "12px")
     .text(d => d.data.name);
 
   // Add taxonomical level
   node.append("text")
-    .attr("dy", "0.5em") // Centered vertically
+    .attr("dy", "0.5em")
     .style("text-anchor", "middle")
     .style("font-size", "10px")
     .style("fill", "#555")
@@ -103,11 +127,16 @@ function renderTree(data) {
 
   // Add date range below each node
   node.append("text")
-    .attr("dy", "1.6em") // Position below level
+    .attr("dy", "1.6em")
     .style("text-anchor", "middle")
     .style("font-size", "10px")
     .style("fill", "#555")
-    .text(d => (d.data.era ? `${d.data.era.start}–${d.data.era.end} BP` : ""));
+    .text(d => {
+      if (d.data.era) {
+        return `${d.data.era.start}–${d.data.era.end} BP`;
+      }
+      return ""; // Empty if no era
+    });
 }
 
 // Show the refresh button

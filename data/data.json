@@ -1,103 +1,41 @@
 {
-  "name": "Indo-European",
-  "level": "Family",
-  "era": { "start": 6000, "end": 3000 },
-  "children": [
+  "nodes": [
     {
-      "name": "Anatolian",
-      "level": "Branch",
-      "era": { "start": 3500, "end": 1500 },
-      "children": [
-        {
-          "name": "Luwian",
-          "level": "Group",
-          "era": { "start": 3300, "end": 1200 },
-          "children": [
-            {
-              "name": "Hieroglyphic Luwian",
-              "level": "Language",
-              "era": { "start": 3200, "end": 1000 },
-              "children": [
-                {
-                  "name": "Luwian Script Variant A",
-                  "level": "Dialect",
-                  "era": { "start": 3200, "end": 900 }
-                },
-                {
-                  "name": "Luwian Script Variant B",
-                  "level": "Dialect",
-                  "era": { "start": 3300, "end": 800 }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Hittite",
-          "level": "Group",
-          "era": { "start": 3300, "end": 1200 },
-          "children": [
-            {
-              "name": "Old Hittite",
-              "level": "Subgroup",
-              "era": { "start": 3300, "end": 1500 },
-              "children": [
-                {
-                  "name": "Hittite Language",
-                  "level": "Language",
-                  "era": { "start": 3300, "end": 1200 }
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "id": "1",
+      "name": "Indo-European",
+      "level": "Family",
+      "era": { "start": 6000, "end": 3000 }
     },
     {
-      "name": "Hellenic",
+      "id": "2",
+      "name": "West Germanic",
       "level": "Branch",
-      "era": { "start": 4000, "end": 0 },
-      "children": [
-        {
-          "name": "Greek",
-          "level": "Group",
-          "era": { "start": 2000, "end": 0 },
-          "children": [
-            {
-              "name": "Attic Greek",
-              "level": "Language",
-              "era": { "start": 1500, "end": 300 },
-              "children": [
-                {
-                  "name": "Classical Attic",
-                  "level": "Dialect",
-                  "era": { "start": 1500, "end": 400 }
-                },
-                {
-                  "name": "Koine Greek",
-                  "level": "Dialect",
-                  "era": { "start": 500, "end": 0 }
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "era": { "start": 3000, "end": 1000 },
+      "parent": "1"
     },
-	{
-		"name": "Alpha",
-		"level": "Branch",
-		"era": { "start": 2000, "end": 0 }
-	},
-	{
-		"name": "Beta",
-		"level": "Branch",
-		"era": { "start": 2000, "end": 0 }
-	},
-	{
-		"name": "Gamma",
-		"level": "Branch",
-		"era": { "start": 2000, "end": 0 }
-	}
+    {
+      "id": "3",
+      "name": "Old English",
+      "level": "Language",
+      "era": { "start": 1500, "end": 1100 },
+      "parent": "2"
+    },
+    {
+      "id": "4",
+      "name": "Old English Dialect 1",
+      "level": "Dialect",
+      "era": { "start": 1400, "end": 1100 },
+      "parent": "3"
+    },
+    {
+      "id": "5",
+      "name": "English",
+      "level": "Language",
+      "era": { "start": 1100, "end": 0 },
+      "parent": "2"
+    }
+  ],
+  "relationships": [
+    { "source": "5", "target": "3" }
   ]
 }
